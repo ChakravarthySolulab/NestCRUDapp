@@ -1,98 +1,135 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestCRUD - Task Management API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A RESTful API for task management built with NestJS, TypeScript, and MongoDB.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- Full CRUD operations for tasks
+- Input validation with detailed error messages
+- MongoDB integration with Mongoose ODM
+- Environment-based configuration
+- Automatic timestamps (createdAt, updatedAt)
+- Task status and priority management
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tech Stack
 
-## Project setup
+- **Framework:** NestJS 11
+- **Language:** TypeScript 5.7
+- **Database:** MongoDB with Mongoose 9
+- **Validation:** class-validator & class-transformer
 
-```bash
-$ npm install
+## Project Structure
+
+```
+src/
+├── main.ts                    # Application entry point
+├── app.module.ts              # Root module
+├── app.controller.ts          # Root controller
+├── app.service.ts             # Root service
+└── tasks/                     # Tasks feature module
+    ├── tasks.module.ts        # Module definition
+    ├── tasks.controller.ts    # REST endpoints
+    ├── tasks.service.ts       # Business logic
+    ├── schemas/
+    │   └── task.schema.ts     # MongoDB schema
+    └── dto/
+        ├── create-task.dto.ts # Create validation
+        └── update-task.dto.ts # Update validation
 ```
 
-## Compile and run the project
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | Health check |
+| POST | `/tasks` | Create a new task |
+| GET | `/tasks` | Get all tasks |
+| GET | `/tasks/:id` | Get task by ID |
+| PATCH | `/tasks/:id` | Update a task |
+| DELETE | `/tasks/:id` | Delete a task |
+
+## Task Model
+
+| Field | Type | Required | Default |
+|-------|------|----------|---------|
+| title | string | Yes | - |
+| description | string | No | - |
+| status | enum | No | `pending` |
+| priority | enum | No | `medium` |
+| dueDate | Date | No | - |
+
+**Status Values:** `pending`, `in-progress`, `completed`
+
+**Priority Values:** `low`, `medium`, `high`
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js v18+
+- MongoDB (local or Atlas)
+
+### Installation
 
 ```bash
-# development
-$ npm run start
+# Install dependencies
+npm install
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+# Configure environment
+# Edit .env file with your MongoDB connection string
 ```
 
-## Run tests
+### Running the App
 
 ```bash
-# unit tests
-$ npm run test
+# Development mode (with hot reload)
+npm run start:dev
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Production mode
+npm run build
+npm run start:prod
 ```
 
-## Deployment
+### Testing with Postman
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+See [SETUP_AND_TESTING_GUIDE.md](./SETUP_AND_TESTING_GUIDE.md) for detailed instructions.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## API Screenshots
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+### Create Task
+![Create Task](./ss/CreateTask.png)
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Get All Tasks
+![Get All Tasks](./ss/GetallTasks.png)
 
-## Resources
+### Get Task by ID
+![Get Task by ID](./ss/GetTaskByID.png)
 
-Check out a few resources that may come in handy when working with NestJS:
+### Update Task
+![Update Task](./ss/Update.png)
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Delete Task
+![Delete Task](./ss/Delete.png)
 
-## Support
+## Environment Variables
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+| Variable | Description | Default |
+|----------|-------------|---------|
+| MONGODB_URI | MongoDB connection string | `mongodb://localhost:27017/nestcrud` |
+| PORT | Application port | `3000` |
 
-## Stay in touch
+## Scripts
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+| Command | Description |
+|---------|-------------|
+| `npm run start:dev` | Start in development mode |
+| `npm run start` | Start the application |
+| `npm run build` | Build for production |
+| `npm run start:prod` | Run production build |
+| `npm run test` | Run unit tests |
+| `npm run test:e2e` | Run e2e tests |
+| `npm run lint` | Run ESLint |
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+MIT
